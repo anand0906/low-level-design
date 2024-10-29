@@ -713,3 +713,483 @@ public class Main {
 <p>By adhering to the Dependency Inversion Principle, we achieve a more flexible, maintainable, and testable codebase, allowing for easier updates and modifications in the future.</p>
 
 
+<br>
+<br>
+
+<h2>DRY</h2>
+<p><strong>DRY Principle</strong> stands for <strong>"Don't Repeat Yourself"</strong> and is all about reducing redundancy in code. When you find yourself writing similar code in multiple places, DRY suggests finding a way to combine it into one reusable piece.</p>
+
+<p><strong>Advantages for Developers:</strong></p>
+<ul>
+    <li><strong>Less Code to Maintain:</strong> When changes are needed, you only update the code in one place, making maintenance easier and reducing errors.</li>
+    <li><strong>Fewer Bugs:</strong> Repeated code often leads to inconsistencies. Using a single, well-tested version reduces bugs and improves reliability.</li>
+    <li><strong>Faster Development:</strong> Reusable code blocks save time since developers don't have to rewrite the same functionality repeatedly.</li>
+    <li><strong>Cleaner Codebase:</strong> DRY leads to organized and modular code, making it easier for others to understand and contribute.</li>
+</ul>
+
+<p><strong>Java Examples:</strong></p>
+
+<ol>
+    <li>
+        <p><strong>Example 1: Without DRY Principle</strong></p>
+        <p>In this example, we calculate the area of a rectangle in multiple parts of the code:</p>
+
+```java
+public class RectangleArea {
+    public static void main(String[] args) {
+        int length1 = 5;
+        int width1 = 10;
+        int area1 = length1 * width1;
+        System.out.println("Area of first rectangle: " + area1);
+
+        int length2 = 7;
+        int width2 = 3;
+        int area2 = length2 * width2;
+        System.out.println("Area of second rectangle: " + area2);
+    }
+}
+```
+        <p>This code has redundant calculations and violates the DRY principle.</p>
+    </li>
+    <li>
+        <p><strong>Example 1: Applying DRY Principle</strong></p>
+        <p>By creating a reusable method, we can avoid repeating the calculation logic:</p>
+
+```java
+public class RectangleArea {
+    public static void main(String[] args) {
+        System.out.println("Area of first rectangle: " + calculateArea(5, 10));
+        System.out.println("Area of second rectangle: " + calculateArea(7, 3));
+    }
+
+    // DRY - Reusable method
+    public static int calculateArea(int length, int width) {
+        return length * width;
+    }
+}
+
+```
+        <p>Now, the <code>calculateArea</code> method is reusable, keeping the code clean and easy to maintain.</p>
+    </li>
+    <li>
+        <p><strong>Example 2: Without DRY Principle</strong></p>
+        <p>This example prints user details in multiple places, repeating similar print logic:</p>  
+
+```java
+public class UserDetails {
+    public static void main(String[] args) {
+        String name = "Alice";
+        int age = 30;
+        String email = "alice@example.com";
+        
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Email: " + email);
+
+        // Repeated again
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Email: " + email);
+    }
+}
+```
+        <p>This code has redundant print statements and violates the DRY principle.</p>
+    </li>
+    <li>
+        <p><strong>Example 2: Applying DRY Principle</strong></p>
+        <p>By creating a reusable method, we can avoid repeating the print logic:</p>
+
+```java
+public class UserDetails {
+    public static void main(String[] args) {
+        String name = "Alice";
+        int age = 30;
+        String email = "alice@example.com";
+        
+        // DRY - Print user details through a reusable method
+        printUserDetails(name, age, email);
+        printUserDetails(name, age, email);
+    }
+
+    public static void printUserDetails(String name, int age, String email) {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Email: " + email);
+    }
+}
+```
+        <p>Now, the <code>printUserDetails</code> method consolidates the logic, making it easier to update and maintain.</p>
+    </li>
+</ol>
+
+<br>
+<br>
+
+<h2>YAGNI</h2>
+<p><strong>The YAGNI principle</strong> stands for "You Aren't Gonna Need It." It’s a principle used in software development that reminds developers to avoid adding features or functionalities until they are actually needed. The idea is that developers should focus only on what’s required now, not on what they <em>might</em> need in the future.</p>
+
+<p>In simple words, <strong>YAGNI advises against writing code based on future possibilities</strong>. Instead, code only what is necessary for the current project requirements. This prevents wasted effort on code that might never be used, making the codebase cleaner and easier to maintain.</p>
+
+<p><strong>Advantages of the YAGNI Principle for Developers</strong></p>
+
+<ol>
+  <li><strong>Saves Time and Effort</strong>  
+      By focusing only on what’s needed, developers save time and avoid building extra, unused code. This reduces the workload and keeps development focused.
+  </li>
+  <li><strong>Easier to Maintain</strong>  
+      Less code means simpler, more readable codebases. Fewer lines of code make it easier to debug, update, and maintain the application.
+  </li>
+  <li><strong>Encourages Simplicity</strong>  
+      YAGNI keeps the codebase lean. Without unnecessary features, developers create straightforward solutions that are less prone to bugs.
+  </li>
+  <li><strong>Increases Flexibility</strong>  
+      Code evolves as requirements change. Avoiding extra features now makes it easier to adapt the code later without needing to remove or refactor unused portions.
+  </li>
+</ol>
+
+<p><strong>Examples of YAGNI in Java</strong></p>
+
+<p>Here are some Java examples to illustrate the YAGNI principle in action:</p>
+
+<p><strong>Example 1: Avoiding Unused Methods</strong></p>
+
+<p><strong>Not Following YAGNI</strong>  
+Suppose a developer creates a <code>Customer</code> class for an application and decides to add methods like <code>calculateDiscount</code> and <code>generateReport</code> even though they aren’t needed right now:</p>
+
+```java
+public class Customer {
+    private String name;
+    private int age;
+
+    public Customer(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // This method might never be used
+    public double calculateDiscount() {
+        return 0.0;
+    }
+
+    // This method might never be used
+    public String generateReport() {
+        return "Customer Report";
+    }
+
+    // Other necessary methods
+}
+```
+
+<p><strong>Following YAGNI</strong>  
+If these methods aren’t needed immediately, YAGNI suggests omitting them for now:</p>
+
+```java
+public class Customer {
+    private String name;
+    private int age;
+
+    public Customer(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Add methods here only when they are actually needed
+}
+```
+
+<p><strong>Example 2: Avoiding Premature Optimizations</strong></p>
+
+<p><strong>Not Following YAGNI</strong>  
+Let’s say a developer is building a logging feature and anticipates that they <em>might</em> need to log to both a file and a database. They implement code for both options, even though only file logging is needed right now:</p>
+
+```java
+public class Logger {
+    public void logToFile(String message) {
+        // Logic to log to a file
+    }
+
+    public void logToDatabase(String message) {
+        // Logic to log to a database (not needed now)
+    }
+}
+```
+
+<p><strong>Following YAGNI</strong>  
+Instead of writing unnecessary code, the developer would implement only the file logging function until database logging is actually required:</p>
+
+```java
+public class Logger {
+    public void logToFile(String message) {
+        // Logic to log to a file
+    }
+}
+```
+
+<p><strong>Example 3: Avoiding Unnecessary Abstractions</strong></p>
+
+<p><strong>Not Following YAGNI</strong>  
+Sometimes developers create interfaces or abstract classes before they’re needed. Here’s an example with an unnecessary interface:</p>
+
+```java
+public interface DataProcessor {
+    void processData();
+}
+
+public class SimpleDataProcessor implements DataProcessor {
+    @Override
+    public void processData() {
+        // Actual processing code
+    }
+}
+```
+
+<p><strong>Following YAGNI</strong>  
+If there’s only one way to process data currently, the interface isn’t needed. The developer can add an interface later if other implementations become necessary:</p>
+
+```java
+public class DataProcessor {
+    public void processData() {
+        // Actual processing code
+    }
+}
+```
+
+<p><strong>Conclusion</strong></p>
+
+<p>The YAGNI principle helps developers avoid wasting time and effort by staying focused on what’s necessary right now. By keeping the codebase simple, it’s easier to maintain and extend as new requirements come in.</p>
+
+<br>
+<br>
+
+<h2>KISS</h2>
+<p><strong>The KISS Principle</strong> stands for "Keep It Simple, Stupid." It’s a concept in software development (and other fields) that encourages simplicity in design and code. The main idea is that <strong>simpler solutions are usually better</strong> because they’re easier to understand, use, and maintain.</p>
+
+<p>In simple words, the KISS principle suggests that <strong>we should avoid making things more complicated than they need to be</strong>. Complex code can be hard to read, fix, and update, while simple code is easier to work with and less likely to have bugs. It doesn’t mean you shouldn’t build advanced features or solve complex problems—just that you should strive to find the simplest way to do it.</p>
+
+<p><strong>Advantages of the KISS Principle for Developers</strong></p>
+
+<ul>
+  <li><strong>Easier to Read and Understand</strong>  
+      When code is simple, anyone on the team (or even future developers) can quickly understand what it does without needing lots of documentation.
+  </li>
+  <li><strong>Reduces Bugs and Errors</strong>  
+      Simpler code has fewer moving parts, which means there’s less room for errors to slip in. This also makes testing easier.
+  </li>
+  <li><strong>Speeds Up Development</strong>  
+      Keeping things simple allows developers to work faster, reducing time spent on unnecessary complexities.
+  </li>
+  <li><strong>Makes Maintenance Easier</strong>  
+      A straightforward codebase is much easier to update, fix, and extend without breaking other parts of the application.
+  </li>
+</ul>
+
+<p><strong>Examples of the KISS Principle in Action</strong></p>
+
+<p><strong>Example 1: Using Clear, Simple Code in Java</strong></p>
+
+<p><strong>Not Following KISS</strong>  
+A developer might over-complicate a simple function by using fancy syntax or unnecessary conditions:</p>
+
+```java
+public boolean isEven(int number) {
+    return (number % 2 == 0) ? true : false;
+}
+```
+
+<p><strong>Following KISS</strong>  
+The simpler version is clear and direct, without unnecessary code:</p>
+
+```java
+public boolean isEven(int number) {
+    return number % 2 == 0;
+}
+```
+
+<p><strong>Example 2: Avoiding Unnecessary Classes and Methods</strong></p>
+
+<p><strong>Not Following KISS</strong>  
+Imagine a developer who creates a separate class and method for a one-line operation:</p>
+
+```java
+public class MathUtils {
+    public static int doubleNumber(int number) {
+        return number * 2;
+    }
+}
+```
+
+<p><strong>Following KISS</strong>  
+In this case, just using the multiplication directly when needed is simpler:</p>
+
+<pre><code>int doubled = number * 2;</code></pre>
+
+<p><strong>Example 3: Keeping Functionality Focused and Direct</strong></p>
+
+<p><strong>Not Following KISS</strong>  
+A complex, hard-to-follow method that performs multiple actions at once:</p>
+
+```java
+public void processOrder(Order order) {
+    if (order.isPaid() && order.isInStock() && !order.isShipped()) {
+        order.markAsProcessed();
+        notifyCustomer(order.getCustomer());
+        sendShipment(order);
+    }
+}
+```
+
+<p><strong>Following KISS</strong>  
+Breaking it down into smaller, clear methods makes each action easy to understand:</p>
+
+```java
+public void processOrder(Order order) {
+    if (canProcess(order)) {
+        markOrderAsProcessed(order);
+        notifyCustomer(order.getCustomer());
+        sendShipment(order);
+    }
+}
+
+private boolean canProcess(Order order) {
+    return order.isPaid() && order.isInStock() && !order.isShipped();
+}
+```
+
+<p><strong>Conclusion</strong></p>
+
+<p>The KISS principle is all about <strong>finding the simplest, most direct way to write code</strong>. By keeping code clear and avoiding unnecessary complexity, developers make software that is easier to understand, debug, and extend.</p>
+
+<br>
+<br>
+
+<h2>Separation Of Concerns</h2>
+<p><strong>Separation of Concerns (SoC)</strong> is a design principle that suggests <strong>dividing a program into distinct sections</strong>, where each section handles a specific part of the functionality. The main idea is to keep different concerns, or areas of responsibility, separate from each other. This makes code easier to understand, modify, and maintain because each part does only one thing, and changes in one part don’t directly affect the others.</p>
+
+<p>In simple words, <strong>Separation of Concerns means organizing code so each part has its own clear job</strong>. For example, in a web application, the part that handles the user interface should be separate from the part that interacts with the database. This way, if you want to change how the interface looks, you won’t have to worry about breaking the database logic.</p>
+
+<p><strong>Advantages of Separation of Concerns</strong></p>
+
+<ul>
+  <li><strong>Easier to Maintain</strong>  
+      Code that is divided into clear, separate parts is easier to update and fix without accidentally affecting unrelated areas.
+  </li>
+  <li><strong>Improves Code Reusability</strong>  
+      Components that handle one specific job can often be reused in other projects, making development faster and reducing redundancy.
+  </li>
+  <li><strong>Simplifies Testing</strong>  
+      When each part of the code is responsible for a single task, it’s easier to test each part individually and find errors faster.
+  </li>
+  <li><strong>Enhances Collaboration</strong>  
+      With separate concerns, teams can work on different parts of the code independently, making it easier for multiple developers to collaborate.
+  </li>
+</ul>
+
+<p><strong>Example of Separation of Concerns in Action</strong></p>
+
+<p>In a basic web application, the concept of SoC is typically divided as follows:</p>
+
+<ul>
+  <li><strong>Presentation Layer (View)</strong>  
+      This is the part that users interact with directly (e.g., HTML, CSS, and JavaScript). It handles how information is displayed.
+  </li>
+  <li><strong>Business Logic Layer (Controller)</strong>  
+      This part manages the core logic of the application (e.g., calculating, processing, and responding to user actions). It acts as a bridge between the view and the data.
+  </li>
+  <li><strong>Data Access Layer (Model)</strong>  
+      This part deals with the database. It handles tasks like retrieving, updating, and storing data in the database.
+  </li>
+</ul>
+
+<p><strong>Example Code Using SoC in Java</strong></p>
+
+<p>Imagine a simple app that retrieves and displays user information from a database. Here’s how SoC might look:</p>
+
+<p><strong>Model (Data Layer)</strong>  
+This layer defines the structure and logic for interacting with user data:</p>
+
+```java
+public class User {
+    private int id;
+    private String name;
+
+    // Constructor, getters, and setters
+}
+
+public class UserRepository {
+    public User getUserById(int id) {
+        // Logic to fetch user from database
+    }
+}
+```
+
+<p><strong>Controller (Business Logic Layer)</strong>  
+This layer handles the main logic and coordinates between the model and view:</p>
+
+```java
+public class UserController {
+    private UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User getUserInfo(int userId) {
+        return userRepository.getUserById(userId);
+    }
+}
+```
+
+<p><strong>View (Presentation Layer)</strong>  
+This layer deals with displaying data to the user:</p>
+
+
+```java
+public class UserView {
+    public void displayUserInfo(User user) {
+        System.out.println("User Name: " + user.getName());
+    }
+}
+```
+
+<p><strong>Conclusion</strong></p>
+
+<p>Separation of Concerns helps to create <strong>organized, modular, and easier-to-maintain code</strong>. By dividing responsibilities, SoC ensures that each part of the code has a clear purpose and can be managed, tested, and modified independently.</p>
+
+
+<br>
+<br>
+
+<h2>Modularity</h2>
+<p><strong>Modularity</strong> is a principle in software development that involves breaking down a program into smaller, independent parts called <strong>modules</strong>. Each module handles a specific function or task within the application. The idea is to make each module <strong>self-contained</strong> so it can be developed, tested, and used on its own, without needing to know the details of other modules.</p>
+
+<p>In simple words, <strong>modularity means dividing a program into parts that each do one job</strong>. This makes it easier to understand, fix, and update, because you only need to work on the specific part you’re interested in without affecting the whole program.</p>
+
+<p><strong>Advantages of Modularity</strong></p>
+
+<ul>
+  <li><strong>Easier to Understand</strong>  
+      Smaller, focused modules are easier to read and understand than one big piece of code.
+  </li>
+  <li><strong>Simplifies Maintenance</strong>  
+      If there’s an issue in one module, you can fix or improve it without changing other parts of the program.
+  </li>
+  <li><strong>Enables Reusability</strong>  
+      Modules that handle specific tasks can be reused in different parts of the program or even in other programs.
+  </li>
+  <li><strong>Supports Collaboration</strong>  
+      Different team members can work on different modules at the same time, making development faster and more efficient.
+  </li>
+</ul>
+
+<p><strong>Example of Modularity</strong></p>
+
+<p>Imagine a program that processes user orders in a shopping application. You might divide it into modules like:</p>
+
+<ul>
+  <li><strong>User Module</strong> – Handles user details and authentication.</li>
+  <li><strong>Product Module</strong> – Manages product data like names, prices, and stock.</li>
+  <li><strong>Order Module</strong> – Processes customer orders and keeps order history.</li>
+  <li><strong>Payment Module</strong> – Manages payment processing and verification.</li>
+</ul>
+
+<p>Each module has a clear job, making the program organized and easy to work with. If you want to change how payments are processed, you only need to update the <strong>Payment Module</strong> without affecting the other parts of the program.</p>
