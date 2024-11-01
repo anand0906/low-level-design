@@ -17,6 +17,8 @@
     <li><strong>Chain of Responsibility</strong></li>
     <li><strong>Iterator</strong></li>
     <li><strong>Template Method</strong></li>
+    <li><strong>Momento</strong></li>
+    <li><strong>Mediator</strong></li>
 </ol>
 
 <h2>Strategy Design Pattern</h2>
@@ -1341,104 +1343,3 @@ Visiting electronics: Smartphone
 <br>
 <br>
 
-<h2>Proxy Design Pattern</h2>
-
-<p>The Proxy Pattern is a structural design pattern that provides a surrogate or placeholder for another object to control access to it. The proxy acts as an intermediary, allowing you to manage interactions with the real object (the subject). This pattern is useful for scenarios like lazy initialization, access control, logging, or managing resource-intensive objects.</p>
-
-<p><strong>Key Characteristics of the Proxy Pattern</strong></p>
-<ul>
-    <li><strong>Control Access</strong>: The proxy can manage access to the real object, providing additional functionality before or after delegating calls to the real object.</li>
-    <li><strong>Lazy Initialization</strong>: The proxy can delay the creation or loading of the real object until it is actually needed.</li>
-    <li><strong>Resource Management</strong>: It can help in managing resources, such as network connections, files, or other expensive operations.</li>
-</ul>
-
-<p><strong>Why Use the Proxy Pattern?</strong></p>
-<p>Use the Proxy Pattern when:</p>
-<ul>
-    <li>You want to control access to an object that is expensive to create or manage.</li>
-    <li>You need to add additional functionality (like logging or access control) without changing the original object.</li>
-    <li>You want to create a placeholder for an object that may not exist yet or is not currently available.</li>
-</ul>
-
-<p><strong>Real-World Analogy</strong></p>
-<p>Consider a real estate agent (the proxy) who represents a property owner (the real subject). The agent controls access to the property, showing it to potential buyers while managing appointments and inquiries. The buyers interact with the agent instead of directly with the property owner.</p>
-
-<p><strong>Components Involved</strong></p>
-<ol>
-    <li><strong>Subject Interface</strong>: Defines the common interface for the real object and the proxy.</li>
-    <li><strong>Real Subject</strong>: The actual object that the proxy represents.</li>
-    <li><strong>Proxy</strong>: The proxy class that implements the subject interface and holds a reference to the real subject, controlling access to it.</li>
-</ol>
-
-<p><strong>Steps to Implement the Proxy Pattern</strong></p>
-<ol>
-    <li>Create a <strong>Subject Interface</strong> that defines the methods that can be called on the real subject.</li>
-    <li>Implement the <strong>Real Subject</strong> class that contains the core functionality.</li>
-    <li>Implement the <strong>Proxy</strong> class that also implements the subject interface and delegates calls to the real subject.</li>
-</ol>
-
-<p><strong>Python Example</strong></p>
-
-<p>Here’s an example in Python demonstrating the Proxy Pattern with a simple image loading scenario:</p>
-
-```python
-class Image:
-    def display(self):
-        pass
-
-class RealImage(Image):
-    def __init__(self, filename):
-        self.filename = filename
-        self.load_image()
-
-    def load_image(self):
-        print(f"Loading image: {self.filename}")
-
-    def display(self):
-        print(f"Displaying image: {self.filename}")
-
-class ProxyImage(Image):
-    def __init__(self, filename):
-        self.filename = filename
-        self.real_image = None
-
-    def display(self):
-        if self.real_image is None:
-            self.real_image = RealImage(self.filename)
-        self.real_image.display()
-
-# Client Code
-def main():
-    image1 = ProxyImage("photo1.jpg")
-    image2 = ProxyImage("photo2.jpg")
-
-    # The image is loaded only when it is displayed for the first time
-    image1.display()  # Output: Loading image: photo1.jpg
-                       #         Displaying image: photo1.jpg
-    image1.display()  # Output: Displaying image: photo1.jpg
-    image2.display()  # Output: Loading image: photo2.jpg
-                       #         Displaying image: photo2.jpg
-
-if __name__ == "__main__":
-    main()
-```
-
-<p><strong>Explanation:</strong></p>
-<ul>
-    <li>The <strong>Image</strong> interface defines the <code>display()</code> method that both the real image and proxy implement.</li>
-    <li>The <strong>RealImage</strong> class represents the actual image and contains the logic to load and display it.</li>
-    <li>The <strong>ProxyImage</strong> class implements the proxy and controls access to the real image. It delays the loading of the real image until the display method is called for the first time.</li>
-    <li>The <strong>Client Code</strong> demonstrates how to use the proxy to load and display images without directly interacting with the real image until necessary.</li>
-</ul>
-
-<p><strong>Output Example:</strong></p>
-
-```python
-Loading image: photo1.jpg
-Displaying image: photo1.jpg
-Displaying image: photo1.jpg
-Loading image: photo2.jpg
-Displaying image: photo2.jpg
-```
-
-<p>This example illustrates how the Proxy Pattern can provide a way to manage access to an object, delaying its initialization and adding extra functionality without modifying the original object. This approach enhances flexibility and can lead to improved performance in scenarios where resource management is essential.</p>
