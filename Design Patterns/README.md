@@ -515,19 +515,36 @@ class Main {
 	<li><strong>Concrete Implmentations: </strong>Radio,Mobile</li>
 </ul>
 
+<p><strong>When it can be applied</strong></p>
+<p><strong>The Bridge Design Pattern</strong> can be applied in the following situations:</p>
+
+<ol>
+    <li>
+        <strong>When you have multiple variations of both abstraction and implementation</strong>: 
+        <p>If you need to create several variations of an abstraction (like different types of remotes) and several implementations (like different devices), the Bridge pattern helps you avoid creating a large number of classes for every combination.</p>
+    </li>
+    <li>
+        <strong>When you want to avoid a rigid inheritance structure</strong>: 
+        <p>If using inheritance to combine abstractions and implementations leads to an explosion of subclasses, the Bridge pattern allows you to use composition instead, making the system more flexible.</p>
+    </li>
+    <li>
+        <strong>When you want to decouple abstraction and implementation</strong>: 
+        <p>If you want to change or extend the implementation without modifying the abstraction or vice versa, the Bridge pattern allows both to evolve independently.</p>
+    </li>
+    <li>
+        <strong>When you need flexibility for future extensions</strong>: 
+        <p>If you foresee the need to add more abstraction or implementation variations in the future, the Bridge pattern makes it easier to extend without breaking existing code.</p>
+    </li>
+</ol>
+
+<p>In summary, use the Bridge pattern when you want to decouple abstraction and implementation to allow them to vary independently, especially when both the abstraction and the implementation are likely to change or have many variations.</p>
+
 <p><strong>Use Cases</strong></p>
 <ul>
 	<li>You have a growing number of classes due to a mix of multiple types of abstractions and implementations, and you want to reduce the complexity.</li>
 	<li>You want to keep the abstraction and implementation loosely coupled.</li>
 	<li>You need to be able to change either the abstraction or the implementation independently.</li>
 	<li>Use if you need to be able to switch implementations at runtime.</li>
-</ul>
-<p><strong>Components :</strong></p>
-<ul>
-	<li><strong>Abstraction: </strong>Given abstraction with multiple functionalities</li>
-	<li><strong>Implementor: </strong>Interface after separating functionalities from abtraction</li>
-	<li><strong>Concrete Implementors: </strong>Implementation of implementors</li>
-	<li><strong>Refined Abtraction: </strong>Modfied Abstraction after applying bridge pattern</li>
 </ul>
 
 <p><strong>Example: </strong></p>
