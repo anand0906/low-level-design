@@ -1091,4 +1091,554 @@ class Main{
 <br>
 
 <h3>Composite Design Pattern</h3>
-<p></p>
+<p>It is a structural design pattern which allows you to build a structure (Tree) where individual items and group of individual items are treated in the same way.</p>
+<p>Think of it like a menu in a restaurant:</p>
+<ul>
+	<li>A menu can have single items (like "Pasta" or "Salad").</li>
+	<li>A menu can also have sub-menus (like "Drinks Menu" with multiple drink options).</li>
+</ul>
+<p>With the Composite pattern, you can perform the same operations on a single menu item or a whole sub-menu without needing special code for each. For example, you can print the entire menu, and the pattern will handle both individual items and groups seamlessly.</p>
+
+<p><strong>Use Cases: </strong></p>
+<ul>
+	<li>Use the Composite pattern when you have to implement a tree-like object structure</li>
+	<ul>
+		<li>The Composite pattern provides you with two basic element types that share a common interface: simple leaves and complex containers. A container can be composed of both leaves and other containers. This lets you construct a nested recursive object structure that resembles a tree.</li>
+	</ul>
+	<li>Use the pattern when you want the client code to treat both simple and complex elements uniformly.</li>
+	<ul>
+		<li> All elements defined by the Composite pattern share a common interface. Using this interface, the client doesn’t have to worry about the concrete class of the objects it works with.</li>
+	</ul>
+	<li>Use when you want to manage complex structures that involve multiple small objects.</li>
+</ul>
+
+<p><strong>Components: </strong></p>
+<ul>
+	<li><strong>Component Interface :</strong>It contains essential methods which needs fo client that should there in both Individual Items (Leaf) and Group of items.</li>
+	<li><strong>Leaf (Concrete Component) :</strong>It represents the indivial item ,it doesn't contain any other objects</li>
+	<li><strong>Composite (Concrete Component) :</strong>It reprsents the group of items, it is composed of other individual items or group of items</li>
+</ul>
+
+```java
+import java.util.*;
+
+interface Menu{
+    public void setTitle(String title);
+    public void print();
+}
+
+class MenuItem implements Menu{
+    String title;
+    
+    MenuItem(String title){
+        this.title=title;
+    }
+    
+    @Override
+    public void setTitle(String title){
+        this.title=title;
+    }
+    
+    @Override
+    public void print(){
+        System.out.println(this.title);
+    }
+}
+
+class SubMenu implements Menu{
+    String title;
+    List<Menu> children;
+    
+    SubMenu(String title){
+        this.title=title;
+        this.children=new ArrayList<>();
+    }
+    
+    public void addChild(Menu menu){
+        this.children.add(menu);
+    }
+    
+    @Override
+    public void setTitle(String title){
+        this.title=title;
+    }
+    
+    @Override
+    public void print(){
+        System.out.println(this.title);
+        for(Menu item:children){
+            item.print();
+        }
+    }
+}
+
+public class Main{
+    public static void main(String args[]){
+        Menu item1=new MenuItem("Dosa");
+        Menu item2=new MenuItem("Idly");
+        Menu item3=new MenuItem("Biryani");
+        Menu item4=new MenuItem("Meals");
+        SubMenu mainMenu=new SubMenu("Main Menu");
+        SubMenu tiffens=new SubMenu("Tiffen");
+        SubMenu mainCourse=new SubMenu("Main Course");
+        tiffens.addChild(item1);
+        tiffens.addChild(item2);
+        mainCourse.addChild(item3);
+        mainCourse.addChild(item4);
+        mainMenu.addChild(tiffens);
+        mainMenu.addChild(mainCourse);
+        System.out.println("printing Main Menu");
+        mainMenu.print();
+        System.out.println("printing tiffens");
+        tiffens.print();
+        System.out.println("printing menu item");
+        item1.print();
+    }
+}
+
+```
+
+<p>Your Java code is a great implementation of the <strong>Composite Design Pattern</strong> using a menu example. Here's a brief explanation of how the code demonstrates the pattern:</p>
+
+<p><strong>How This Code Uses the Composite Pattern</strong></p>
+<ul>
+    <li>
+        <strong>Interface (<code>Menu</code>)</strong>: 
+        <p>Defines a common interface for both individual items (<code>MenuItem</code>) and groups of items (<code>SubMenu</code>). This allows you to treat both single menu items and sub-menus in a consistent way.</p>
+    </li>
+    <li>
+        <strong>Leaf Class (<code>MenuItem</code>)</strong>: 
+        <p>Represents the simplest part of the structure (a single item on the menu). It has a <code>title</code> and a <code>print</code> method to display itself.</p>
+    </li>
+    <li>
+        <strong>Composite Class (<code>SubMenu</code>)</strong>: 
+        <p>Represents a group of menu items or sub-menus. It can hold a list of children (<code>List&lt;Menu&gt; children</code>), which could be either <code>MenuItem</code> or <code>SubMenu</code>. The <code>print()</code> method recursively prints all items in the sub-menu.</p>
+    </li>
+</ul>
+
+<p><strong>Explanation</strong></p>
+<ul>
+    <li>The <code>Main Menu</code> is a composite structure containing two sub-menus: <code>Tiffen</code> and <code>Main Course</code>.</li>
+    <li><code>Tiffen</code> contains two items: <code>Dosa</code> and <code>Idly</code>.</li>
+    <li><code>Main Course</code> contains two items: <code>Biryani</code> and <code>Meals</code>.</li>
+    <li>The <code>print()</code> method of <code>SubMenu</code> recursively prints its title and all of its children's titles, whether they are individual items or other sub-menus.</li>
+</ul>
+<p><strong>Benefits</strong></p>
+<ul>
+    <li><strong>Uniformity</strong>: You can treat individual <code>MenuItem</code> objects and <code>SubMenu</code> objects the same way using the <code>Menu</code> interface.</li>
+    <li><strong>Flexibility</strong>: You can easily extend the menu by adding more items or sub-menus.</li>
+</ul>
+
+<p>This demonstrates the <strong>Composite Design Pattern</strong> perfectly by allowing both simple and complex objects to be handled uniformly.</p>
+
+<p><strong>Real Time Examples</strong></p>
+
+<p>Here are some real-time examples of the <strong>Composite Design Pattern</strong>:</p>
+
+<ul>
+    <li>
+        <strong>File System</strong>:
+        <p>The file system on your computer is a classic example. You have individual files and folders. A folder can contain both files and other folders, and you can perform operations like open, delete, or move on both in the same way.</p>
+    </li>
+    <li>
+        <strong>Graphical User Interface (GUI)</strong>:
+        <p>In GUI frameworks, you have simple components like buttons or text fields and complex components like panels or windows that contain other components. The Composite pattern allows you to treat all components uniformly.</p>
+    </li>
+    <li>
+        <strong>Organization Hierarchy</strong>:
+        <p>Companies have organizational structures with different levels: employees, managers, and departments. Each department may contain individual employees or other departments, and operations like calculating the total number of employees can be done uniformly.</p>
+    </li>
+    <li>
+        <strong>Menus in Applications</strong>:
+        <p>Menus in software applications (like a drop-down menu) use this pattern. A menu can have individual menu items or sub-menus, and both can be handled uniformly for displaying or activating.</p>
+    </li>
+    <li>
+        <strong>Drawing Applications</strong>:
+        <p>In drawing applications (like Photoshop), you have simple shapes like lines or circles and complex shapes composed of several simple shapes. The Composite pattern lets you treat both simple and complex shapes consistently.</p>
+    </li>
+    <li>
+        <strong>Document Structure</strong>:
+        <p>In a document editing application, you might have text elements like characters, words, paragraphs, or whole sections. Operations like formatting or searching can be uniformly applied across these different levels.</p>
+    </li>
+    <li>
+        <strong>E-commerce Systems</strong>:
+        <p>Product catalogs in an e-commerce system can have individual products and categories that contain multiple products or subcategories. This structure allows you to manage products and categories uniformly.</p>
+    </li>
+</ul>
+
+<p>These examples illustrate how the Composite Design Pattern helps in managing complex hierarchies and making operations easier to apply across both simple and composite objects.</p>
+
+<h3>Fascade Design Pattern</h3>
+<p>It is a structural design pattern that provides a simple interface which hides all complexity involved in using other classes or subsystems to peform operation, so the client can interact with just the interface instead of dealing with the complexity of multiple classes or subsystems.</p>
+
+<p><strong>Use Cases: </strong></p>
+<ul>
+	<li><strong>To Hide Complexity :</strong>When you have a complex system with many interdependent classes and you want to provide a simpler interface.</li>
+	<li><strong>To Make Code More Manageable :</strong>When you want to keep the code organized by reducing dependencies.</li>
+	<li><strong>When Upgrading or Expanding Systems :</strong>t’s useful when you’re expanding or upgrading a system, as you can make changes behind the facade without impacting the client.</li>
+</ul>
+
+<p><strong>Example :</strong></p>
+
+```java
+// Complex subsystems
+class Engine {
+    public void start() {
+        System.out.println("Engine started.");
+    }
+}
+
+class FuelPump {
+    public void pump() {
+        System.out.println("Fuel pump activated.");
+    }
+}
+
+class Battery {
+    public void providePower() {
+        System.out.println("Battery providing power.");
+    }
+}
+
+// Facade
+class CarFacade {
+    private Engine engine;
+    private FuelPump fuelPump;
+    private Battery battery;
+
+    public CarFacade() {
+        engine = new Engine();
+        fuelPump = new FuelPump();
+        battery = new Battery();
+    }
+
+    public void startCar() {
+        battery.providePower();
+        fuelPump.pump();
+        engine.start();
+    }
+}
+
+// Client code
+public class Main {
+    public static void main(String[] args) {
+        CarFacade car = new CarFacade();
+        car.startCar(); // Start the car using the facade
+    }
+}
+```
+
+<p>Here, CarFacade simplifies the process of starting the car by providing a start_car method that handles all the details internally.</p>
+
+```java
+// Complex subsystems
+class Amplifier {
+    public void on() {
+        System.out.println("Amplifier on.");
+    }
+
+    public void setVolume(int level) {
+        System.out.println("Amplifier volume set to " + level);
+    }
+}
+
+class DVDPlayer {
+    public void on() {
+        System.out.println("DVD Player on.");
+    }
+
+    public void play(String movie) {
+        System.out.println("Playing '" + movie + "'");
+    }
+}
+
+class Projector {
+    public void on() {
+        System.out.println("Projector on.");
+    }
+
+    public void wideScreenMode() {
+        System.out.println("Projector in widescreen mode.");
+    }
+}
+
+// Facade
+class HomeTheaterFacade {
+    private Amplifier amp;
+    private DVDPlayer dvd;
+    private Projector projector;
+
+    public HomeTheaterFacade(Amplifier amp, DVDPlayer dvd, Projector projector) {
+        this.amp = amp;
+        this.dvd = dvd;
+        this.projector = projector;
+    }
+
+    public void watchMovie(String movie) {
+        System.out.println("Get ready to watch a movie...");
+        amp.on();
+        amp.setVolume(5);
+        dvd.on();
+        dvd.play(movie);
+        projector.on();
+        projector.wideScreenMode();
+    }
+}
+
+// Client code
+public class Main {
+    public static void main(String[] args) {
+        Amplifier amp = new Amplifier();
+        DVDPlayer dvd = new DVDPlayer();
+        Projector projector = new Projector();
+        HomeTheaterFacade homeTheater = new HomeTheaterFacade(amp, dvd, projector);
+
+        homeTheater.watchMovie("Inception"); // Watch the movie using the facade
+    }
+}
+```
+
+<p>In this example, the HomeTheaterFacade simplifies the process of setting up the home theater system, allowing the user to call a single watch_movie method.</p>
+
+
+<h3>FlyWeight Design Pattern</h3>
+<p>It is a structural design pattern that reduces memory usage by reusing objects with similar data. Instead of creating new instances every time, it stores shared objects in a central repository (shared memory). When a new object is requested, the system checks if an identical object already exists in the shared memory. If it does, it returns the existing object; if not, it creates a new one.</p>
+
+<p><strong>Use Cases : </strong></p>
+<ul>
+    <li>When there are a large number of similar objects that can share data (e.g., multiple shapes in a graphic editor).</li>
+    <li>When memory usage is a concern, and objects have some attributes that can be shared.</li>
+    <li>When the cost of creating new objects is high, and object reuse can optimize performance.</li>
+</ul>
+
+<p><strong>Example : </strong></p>
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+// Flyweight interface
+interface Shape {
+    void draw(String color);
+}
+
+// Concrete Flyweight
+class Circle implements Shape {
+    private String color; // intrinsic state
+    
+    // constructor to set the color for the circle
+    public Circle(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public void draw(String color) {
+        // Use the color passed for the extrinsic state
+        System.out.println("Drawing circle of color: " + color + " and shared color: " + this.color);
+    }
+}
+
+// Flyweight Factory
+class ShapeFactory {
+    private Map<String, Shape> circleMap = new HashMap<>();
+    
+    public Shape getCircle(String color) {
+        Shape circle = circleMap.get(color);
+        
+        if (circle == null) {
+            circle = new Circle(color);
+            circleMap.put(color, circle);
+            System.out.println("Creating circle of color: " + color);
+        }
+        
+        return circle;
+    }
+}
+
+// Client Code
+public class FlyweightExample {
+    public static void main(String[] args) {
+        ShapeFactory shapeFactory = new ShapeFactory();
+        
+        // Shared shapes
+        Shape circle1 = shapeFactory.getCircle("Red");
+        Shape circle2 = shapeFactory.getCircle("Blue");
+        
+        // Extrinsic state differs
+        circle1.draw("X");
+        circle2.draw("Y");
+        
+        // Reusing existing circle object
+        Shape circle3 = shapeFactory.getCircle("Red");
+        circle3.draw("Z");
+    }
+}
+```
+
+<p>The ShapeFactory creates only one circle object per unique color, and subsequent requests for that color reuse the existing object.</p>
+<p>The intrinsic state (color) is shared among the objects, while the extrinsic state (X, Y, Z) is passed when calling the draw() method.</p>
+
+<h3>Proxy Design Pattern</h3>
+<p>It is a structural design patten that provides an object (Proxy) which represents the another object(Real), where proxy acts as helper for real object,that ontrols access to the real object by adding additional functionality like access control, logging, lazy initialization, etc., without changing the real object itself.</p>
+
+<p><strong>Use Cases : </strong></p>
+<p><strong>Use Cases for Proxy Design Pattern</strong></p>
+
+<ol>
+    <li>
+        <p><strong>Lazy Initialization (Virtual Proxy):</strong></p>
+        <ul>
+            <li>Use when an object is expensive to create, and you want to delay its creation until it's needed.</li>
+            <li>Example: A large image or a complex report is not loaded until the user requests it.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Access Control (Protection Proxy):</strong></p>
+        <ul>
+            <li>Use when you want to control access to an object based on permissions or conditions.</li>
+            <li>Example: Restricting access to a resource or service based on user roles (admin, guest, etc.).</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Remote Access (Remote Proxy):</strong></p>
+        <ul>
+            <li>Use when an object exists in a different address space (such as another machine or network), and you need a proxy to interact with it.</li>
+            <li>Example: Communicating with a remote server or database over the network.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Caching (Cache Proxy):</strong></p>
+        <ul>
+            <li>Use when you want to store a local copy of an object to avoid recalculating or reloading it multiple times.</li>
+            <li>Example: Storing results of expensive calculations or data fetched from a database to speed up future access.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Monitoring (Smart Proxy):</strong></p>
+        <ul>
+            <li>Use when you want to monitor the usage of an object, like counting the number of times an object is accessed or logging activity.</li>
+            <li>Example: Counting the number of times a database connection is used or logging each method call for debugging.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Preloading (Virtual Proxy):</strong></p>
+        <ul>
+            <li>Use when you want to preload certain data or resources before the user actually needs them.</li>
+            <li>Example: Preloading game assets or web page content to enhance performance.</li>
+        </ul>
+    </li>
+</ol>
+
+<p><strong>Components Involved</strong></p>
+<ol>
+    <li><strong>Subject Interface</strong>: Defines the common interface for the real object and the proxy.</li>
+    <li><strong>Real Subject</strong>: The actual object that the proxy represents.</li>
+    <li><strong>Proxy</strong>: The proxy class that implements the subject interface and holds a reference to the real subject, controlling access to it.</li>
+</ol>
+
+
+<p><strong>Example : </strong></p>
+
+```java
+// Subject Interface
+interface Subject {
+    void performAction();
+}
+
+// Real Subject
+class RealSubject implements Subject {
+    @Override
+    public void performAction() {
+        System.out.println("Action performed by RealSubject.");
+    }
+}
+
+// Proxy
+class Proxy implements Subject {
+    private RealSubject realSubject;
+
+    @Override
+    public void performAction() {
+        if (realSubject == null) {
+            realSubject = new RealSubject();  // Lazy initialization
+        }
+        realSubject.performAction();
+    }
+}
+
+// Client code
+public class Main {
+    public static void main(String[] args) {
+        Subject proxy = new Proxy();
+        proxy.performAction(); // The real subject is initialized only when needed
+    }
+}
+```
+
+<p><strong>Real Time Examples</strong></p>
+<p><strong>1. Virtual Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> Image loading in a photo gallery app.</li>
+    <li><strong>Explanation:</strong> When displaying a large collection of images, instead of loading all images at once, the proxy can load a placeholder image first and load the actual image only when the user views it. This reduces memory usage and loading time.</li>
+</ul>
+
+<p><strong>2. Remote Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> Database access or remote service call.</li>
+    <li><strong>Explanation:</strong> When accessing a remote database or a web service, a proxy can be used to handle communication between the client and the server. It handles network issues, retries, and can also provide local caching of data to optimize performance.</li>
+</ul>
+
+<p><strong>3. Protection Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> File access control.</li>
+    <li><strong>Explanation:</strong> In a system with multiple users, a proxy can be used to restrict access to certain files or resources. The proxy checks the user’s permissions before forwarding the request to the real resource. For instance, an admin user may have access to sensitive data, whereas regular users do not.</li>
+</ul>
+
+<p><strong>4. Cache Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> Caching API responses.</li>
+    <li><strong>Explanation:</strong> When making API calls to fetch data that doesn't change frequently, a proxy can store (cache) the responses. The next time the same data is requested, the proxy can return the cached response, reducing the need for repeated API calls and improving performance.</li>
+</ul>
+
+<p><strong>5. Smart Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> Memory management in large systems.</li>
+    <li><strong>Explanation:</strong> In a system where objects consume a lot of memory (like a game with complex 3D models), a smart proxy can be used to load objects into memory only when necessary and unload them when they are no longer in use. This prevents unnecessary memory consumption.</li>
+</ul>
+
+<p><strong>6. Firewall Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> Security and network filtering.</li>
+    <li><strong>Explanation:</strong> A proxy server can act as an intermediary between a user and the internet, filtering requests for malicious content or blocking access to certain websites based on company policies.</li>
+</ul>
+
+<p><strong>7. Internet Proxy (Browser Proxy):</strong></p>
+<ul>
+    <li><strong>Example:</strong> Web browsers accessing the internet.</li>
+    <li><strong>Explanation:</strong> A proxy server sits between a client (web browser) and the internet to handle requests, possibly caching content or providing additional security features like encryption, monitoring, and logging.</li>
+</ul>
+
+<p><strong>8. Logging Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> API request logging.</li>
+    <li><strong>Explanation:</strong> A proxy can be used to intercept method calls to the real object and log the details of each method invocation (e.g., time, parameters, results). This is useful for debugging and monitoring system performance.</li>
+</ul>
+
+<p><strong>9. Lazy Initialization Proxy:</strong></p>
+<ul>
+    <li><strong>Example:</strong> User authentication systems.</li>
+    <li><strong>Explanation:</strong> In some systems, a user’s profile data might be loaded only when needed. For example, a proxy can be used to delay the loading of detailed user data (like profile picture, preferences) until the user actually requests it.</li>
+</ul>
+
+<p><strong>10. Multimedia Streaming:</strong></p>
+<ul>
+    <li><strong>Example:</strong> Streaming media services like Netflix or YouTube.</li>
+    <li><strong>Explanation:</strong> A proxy could be used to handle buffering, load balancing, or security when delivering media content from a server to the client. It can help improve streaming performance or provide caching to reduce bandwidth usage.</li>
+</ul>
+
+<p><strong>11. Cloud Services Access:</strong></p>
+<ul>
+    <li><strong>Example:</strong> Using a proxy to access cloud storage.</li>
+    <li><strong>Explanation:</strong> In cloud environments, proxies are often used to provide access control, logging, and monitoring for requests made to cloud services like AWS, Google Cloud, or Azure. They can help ensure proper authentication and security while also enabling logging of user activity.</li>
+</ul>
+
