@@ -971,4 +971,124 @@ Rendering Continuous Page View
 </ul>
 
 
-<h3></h3>
+<h3>Decorator Design Pattern</h3>
+<p>It is a structural design pattern that allows to add behaviours/functionalities/responsibilities to existed objects dynamically at runtime without effecting the other objects from the same class.</p>
+<p>It is like a alternative way to add additional functionalities using inheritence, which adds functionality at compile time</p>
+
+<p><strong>Use Cases: </strong></p>
+<ul>
+	<li>Use the Decorator pattern when you need to be able to assign extra behaviors to objects at runtime without breaking the code that uses these objects.</li>
+	<li>Use the pattern when it’s not possible to extend an object’s behavior using inheritance.</li>
+	<li>When subclassing would result in a large number of subclasses to cover all possible combinations.</li>
+	<li>When Core Functionality Should Remain Unchanged: The base object remains unchanged, but its behavior can be altered using decorators.</li>
+</ul>
+
+<p><strong>Components: </strong></p>
+<ul>
+	<li><strong>Component: </strong>It is an abstract class or interface for both the concreate components and decorators</li>
+	<li><strong>Concrete Component: </strong>It is implemention of Component. It give the object which we want to add new behaviours at runtime.</li>
+	<li><strong>Decorator: </strong>It is a abstract class which implements Component interface and has the refernce to Object which needs additional functionalities</li>
+	<li><strong>Concrete Decorator: </strong>These are the concrete classes that extend the Decorator class. They add specific behaviors or responsibilities to the Component. Each Concrete Decorator can add one or more behaviors to the Component.</li>
+</ul>
+
+<p><strong>Example: </strong></p>
+<p>Suppose we are building a coffee shop application where customers can order different types of coffee. Each coffee can have various optional add-ons such as milk, sugar, whipped cream, etc. We want to implement a system where we can dynamically add these add-ons to a coffee order without modifying the coffee classes themselves.</p>
+
+```java
+interface Coffee{
+    public String getDescription();
+    public Integer cost();
+}
+
+class BasicCoffee implements Coffee{
+
+    @Override
+    public String getDescription(){
+        return "Coffee";
+    }
+    
+    @Override
+    public Integer cost(){
+        return 100;
+    }
+}
+
+abstract class CoffeeDecorator implements Coffee{
+    Coffee coffee;
+    CoffeeDecorator(Coffee coffee){
+        this.coffee=coffee;
+    }
+    
+    @Override
+    public String getDescription(){
+        return this.coffee.getDescription();
+    }
+    
+    @Override
+    public Integer cost(){
+        return this.coffee.cost();
+    }
+}
+
+class MilkDecorator extends CoffeeDecorator{
+    
+    MilkDecorator(Coffee coffee){
+        super(coffee);
+    }
+    
+    @Override
+    public String getDescription(){
+        return this.coffee.getDescription()+",Milk";
+    }
+    
+    @Override
+    public Integer cost(){
+        return this.coffee.cost()+20;
+    }
+}
+
+class SugarDecorator extends CoffeeDecorator{
+    
+    SugarDecorator(Coffee coffee){
+        super(coffee);
+    }
+    
+    @Override
+    public String getDescription(){
+        return this.coffee.getDescription()+",Sugar";
+    }
+    
+    @Override
+    public Integer cost(){
+        return this.coffee.cost()+20;
+    }
+}
+
+class Main{
+    
+    public static void main(String[] args){
+        Coffee coffee=new BasicCoffee();
+        System.out.println(coffee.getDescription());
+        coffee=new MilkDecorator(coffee);
+        System.out.println(coffee.getDescription());
+        coffee=new SugarDecorator(coffee);
+        System.out.println(coffee.getDescription());
+    }
+    
+}
+```
+
+<p>Here, we can observe that additional behaviours of sugar , milk is getting added to basic coffee without having any imapact to BasicCoffee implementaion</p>
+
+<p><strong>Real Time Examples</strong></p>
+<ul>
+	<li><strong>User Interfaces: </strong>Adding scrollbars to text fields, borders to windows, or toolbars to applications without altering the original UI component classes.</li>
+	<li><strong>Logging: </strong>Adding logging, security, or notification functionality dynamically to classes.</li>
+	<li><strong>Data Processing: </strong> Wrapping data in various decorators to apply filters, formatters, or transformations.</li>
+</ul>
+
+<br>
+<br>
+
+<h3>Composite Design Pattern</h3>
+<p></p>
