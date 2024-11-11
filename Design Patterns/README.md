@@ -138,11 +138,383 @@ public class Main {
 
 
 <h3>Bridge Design Pattern</h3>
-<p>It is a structural design pattern which separates the functionality (abstraction) from its implementation when there is multiple variations of functionality in its implementations, so that both functionality and implementations can be modified without changing existance logic.</p>
-<br>
-<p>Suppose, there is a interface with two functionalities(abstract methods), if there are multiple variations for each functionality. instead of creating multiple implementations for each combinations of functionlities, we can separate interface into two functionlity based interfaces.So, that we can use respective implementation of functionality in objects. we can easily modify the both functionalitis without effecting existance objects</p>
-<br>
-<p>Simply, it is structural design pattern which separates abstractions from its implementations, so that both can change independently without any effect.</p>
+<p>It is a structural design pattern which seperates the abstraction from its implementation, so that both can be developed independently without effecting each other.</p>
+<p><strong>How it seperates ?</strong></p>
+<ul>
+	<li><strong>Abstraction: </strong>This is the high-level part of your system that defines a set of operations or behaviors. It is what the user or the client of your code interacts with. The abstraction does not contain any implementation details; instead, it refers to an implementation</li>
+	<li><strong>Implementation: </strong>This is the low-level part that provides the concrete details of how the abstraction’s operations are carried out. The implementation can be easily swapped, modified, or extended without changing the abstraction.</li>
+</ul>
+<p><strong>Example :</strong></p>
+
+<p>In this example, client is intreracting with abstraction(Device) only.</p>
+<p>But the abstraction, always referring the implementation (Mobile,Radio), then only it can access its functionality</p>
+
+```java
+interface Device{
+    public void turnOn();
+    public void turnOff();
+}
+
+class Radio implements Device{
+    
+    @Override
+    public void turnOn(){
+        System.out.println("Radio : Turning On");
+    }
+
+    @Override
+    public void turnOff(){
+        System.out.println("Radio : Turning Off");
+    }
+}
+
+class Mobile implements Device{
+    
+    @Override
+    public void turnOn(){
+        System.out.println("Mobile : Turning On");
+    }
+
+    @Override
+    public void turnOff(){
+        System.out.println("Mobile : Turning Off");
+    }
+}
+
+class Client {
+    Device device;
+    Client(Device device){
+        this.device=device;
+    }
+    
+    void Off(){
+        this.device.turnOn();
+    }
+    
+    void On(){
+        this.device.turnOff();
+    }
+}
+
+
+class Main {
+    public static void main(String[] args) {
+        Client client=new Client(new Radio());
+        client.Off();
+        client=new Client(new Mobile());
+        client.On();
+    }
+}
+```
+
+<p>This is fine when we have simple interface and its implementations</p>
+<p>But if there is complex interfaces like as follows</p>
+
+```java
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+
+interface Device{
+    public void turnOn();
+    public void turnOff();
+}
+
+class Radio implements Device{
+    
+    @Override
+    public void turnOn(){
+        System.out.println("Radio : Turning On");
+    }
+
+    @Override
+    public void turnOff(){
+        System.out.println("Radio : Turning Off");
+    }
+}
+
+class Mobile implements Device{
+    
+    @Override
+    public void turnOn(){
+        System.out.println("Mobile : Turning On");
+    }
+
+    @Override
+    public void turnOff(){
+        System.out.println("Mobile : Turning Off");
+    }
+}
+
+interface Remote{
+    void onButton();
+    void offButton();
+}
+
+class BasicRemoteRadio extends Radio implements Remote{
+    
+    @Override
+    public void onButton(){
+        this.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.turnOff();
+    }
+}
+
+class BasicRemoteMobile extends Mobile implements Remote{
+    
+    @Override
+    public void onButton(){
+        this.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.turnOff();
+    }
+}
+
+class Client {
+    Remote remote;
+    Client(Remote remote){
+        this.remote=remote;
+    }
+    
+    void On(){
+        this.remote.onButton();
+    }
+    
+    void Off(){
+        this.remote.offButton();
+    }
+}
+
+
+class Main {
+    public static void main(String[] args) {
+        Client client=new Client(new BasicRemoteRadio());
+        client.Off();
+        client=new Client(new BasicRemoteMobile());
+        client.On();
+    }
+}
+```
+<p>Here also, Client iteracts with interface (Remote), which is an abstraction which is completely depend on its implementation</p>
+<p>Here, the abstraction is littile complex because, the Remote Abstraction depends on Device Implementation to perform its action</p>
+<ul>
+	<li>Abstraction : Device, Remote</li>
+	<li>Remote Depends on Device implementations</li>
+</ul>
+<p>If we want to implement new abstraction of Remote, it will increase the number of implementation classes exponentially</p>
+<p>Suppose we want to add new remote called AdavancedRemote, which will add mute functionality</p>
+
+```java
+interface Remote{
+    void onButton();
+    void offButton();
+}
+
+interface AdvancedRemote extends Remote{
+    void mute();
+}
+
+class BasicRemoteRadio extends Radio implements Remote{
+    
+    @Override
+    public void onButton(){
+        this.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.turnOff();
+    }
+}
+
+
+class BasicRemoteMobile extends Mobile implements Remote{
+    
+    @Override
+    public void onButton(){
+        this.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.turnOff();
+    }
+}
+
+class AdvancedRemoteMobile extends Mobile implements AdvancedRemote{
+    
+    @Override
+    public void onButton(){
+        this.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.turnOff();
+    }
+    
+    @Override
+    public void mute(){
+        System.out.println("Muting Mobile");
+    }
+}
+
+class AdvancedRemoteRadio extends Radio implements AdvancedRemote{
+    
+    @Override
+    public void onButton(){
+        this.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.turnOff();
+    }
+    
+     @Override
+    public void mute(){
+        System.out.println("Muting Radio");
+    }
+}
+```
+<p>Here we can observe, number of implmentation classes increases exponentially. which will increase complexity</p>
+<p>Here, completely tightly coupled with each other (Remote(abstraction) With Devices(Implementations)) which is based on inheritance</p>
+<p>Both Remote And Device are independent with each other, remote depends on device to perform opearation</p>
+<p>If, there is any scenario, where abstraction and implementations are indepenedent with each other and abstraction depends on implementation, we can use composition instead of inhertance</p>
+
+```java
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+
+interface Device{
+    public void turnOn();
+    public void turnOff();
+}
+
+class Radio implements Device{
+    
+    @Override
+    public void turnOn(){
+        System.out.println("Radio : Turning On");
+    }
+
+    @Override
+    public void turnOff(){
+        System.out.println("Radio : Turning Off");
+    }
+}
+
+class Mobile implements Device{
+    
+    @Override
+    public void turnOn(){
+        System.out.println("Mobile : Turning On");
+    }
+
+    @Override
+    public void turnOff(){
+        System.out.println("Mobile : Turning Off");
+    }
+}
+
+interface Remote{
+    void onButton();
+    void offButton();
+}
+
+interface AdvancedRemote extends Remote{
+    void mute();
+}
+
+class BasicRemote implements Remote{
+    
+    Device device;
+    
+    BasicRemote(Device device){
+        this.device=device;
+    }
+    
+    @Override
+    public void onButton(){
+        this.device.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.device.turnOff();
+    }
+}
+
+class AdvancedDeviceRemote implements AdvancedRemote{
+    
+    Device device;
+    
+    AdvancedDeviceRemote(Device device){
+        this.device=device;
+    }
+    
+    @Override
+    public void onButton(){
+        this.device.turnOn();
+    }
+
+    @Override
+    public void offButton(){
+        this.device.turnOff();
+    }
+    
+    @Override
+    public void mute(){
+        System.out.println("Muting Mobile");
+    }
+}
+
+
+
+class Client {
+    Remote remote;
+    Client(Remote remote){
+        this.remote=remote;
+    }
+    
+    void On(){
+        this.remote.onButton();
+    }
+    
+    void Off(){
+        this.remote.offButton();
+    }
+}
+
+
+class Main {
+    public static void main(String[] args) {
+        Radio radio=new Radio();
+        Client client=new Client(new BasicRemote(radio));
+        client.Off();
+        client=new Client(new AdvancedDeviceRemote(radio));
+        client.On();
+    }
+}
+```
+
+<p>Here , we are not depending on client is not completely depending on implementations, instead it depends on abstraction which is holding the implementation of devices, so that easily single abstraction (BasicRemote or AdvancedRemote) can handle multiple devices at run time</p>
+<p>This separates the asbtraction (Remote) from implementation (Devices), now both devices and implementations can vary independently</p>
+<img src="https://media.geeksforgeeks.org/wp-content/uploads/Bridge_Design.png">
+<p>As shown in image, abstraction holds implementations dynamically, so its looks like bridge, that's why it is called bridge pattern</p>
+<ul>
+	<li><strong>Abstraction: </strong>Remote</li>
+	<li><strong>Refined Abstraction: </strong>AdvnacedRemote</li>
+	<li><strong>Implementor: </strong>Device</li>
+	<li><strong>Concrete Implmentations: </strong>Radio,Mobile</li>
+</ul>
+
 <p><strong>Use Cases</strong></p>
 <ul>
 	<li>You have a growing number of classes due to a mix of multiple types of abstractions and implementations, and you want to reduce the complexity.</li>
@@ -582,3 +954,4 @@ Rendering Continuous Page View
 </ul>
 
 
+<h3></h3>
