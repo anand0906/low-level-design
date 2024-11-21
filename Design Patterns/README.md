@@ -15,6 +15,12 @@
 	<li><strong>Behavioral Patterns</strong> :  Deals with how objects interact and communicate with each other.</li>
 </ul>
 
+<br>
+<br>
+
+<h2>Creational Patterns</h2>
+
+
 <h2>Structural Patterns</h2>
 <p>Structural patterns are like blueprints how different classes and objects can be combined/organized together to form efficent/bigger structures for making system more maintainble,flexible and reusable</p>
 <p>Types of structural patterns</p>
@@ -1642,3 +1648,6 @@ public class Main {
     <li><strong>Explanation:</strong> In cloud environments, proxies are often used to provide access control, logging, and monitoring for requests made to cloud services like AWS, Google Cloud, or Azure. They can help ensure proper authentication and security while also enabling logging of user activity.</li>
 </ul>
 
+
+
+<h2>Structural Design Patterns</h2>
