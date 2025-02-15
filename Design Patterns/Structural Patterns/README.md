@@ -217,92 +217,104 @@ player.play("audio.wav")    # Output: Cannot play audio.wav: Unsupported format
     <li>This implementation can easily adapt multiple different classes by creating additional adapters if needed, promoting code reusability.</li>
 </ul>
 
-<p><strong>Example For Two Way Adapter : </strong></p>
+<p><strong>Examples for Two Way adapter</strong></p>
 
-```python
-# Target Interface: The client expects this interface to work with.
-from abc import ABC, abstractmethod
-class VideoPlayer(ABC):
+**Two-Way Adapter Pattern in Software Industry**
 
-	@abstractmethod
-    def play(self, video_id):
-        pass
-    
-    @abstractmethod
-    def pause(self):
-        pass
-    
-    @abstractmethod
-    def get_status(self):
-        pass
+**Overview**
+A **Two-Way Adapter** is a design pattern that enables two incompatible interfaces to communicate in **both directions**. Unlike a standard adapter, which only works one way, a two-way adapter allows both systems to interact seamlessly.
 
-# Adaptee: The existing class with an incompatible interface
-class StreamingService:
-    def start_video(self, video_id):
-        print(f"Starting video with ID: {video_id}")
-    
-    def stop_video(self):
-        print("Stopping video.")
-    
-    def is_video_playing(self):
-        return True  # Assume video is always playing for this example
+---
 
-# Two-way Adapter: Acts as both the video player and the streaming service
-class VideoAdapter(VideoPlayer):
-    def __init__(self, service):
-        self.service = service
-        self.current_video_id = None
-    
-    def play(self, video_id):
-        self.current_video_id = video_id
-        self.service.start_video(video_id)  # Delegate to the service
+**Real-World Example: Modernizing a Payment Gateway**
+**Scenario**
+A company is transitioning from an old payment processing system (**LegacyPayment**) to a new modern payment API (**ModernPayment**). However, both systems need to work together until the migration is fully complete. A **Two-Way Adapter** ensures that transactions can flow between both systems without disrupting existing clients.
 
-    def pause(self):
-        self.service.stop_video()  # Delegate to the service
+---
 
-    def get_status(self):
-        if self.service.is_video_playing():
-            return f"Video {self.current_video_id} is currently playing."
-        else:
-            return "No video is currently playing."
+**Implementation in Java**
+```java
+// Legacy Payment System (Old Interface)
+interface LegacyPayment {
+    void processPaymentLegacy(double amount, String accountNo);
+}
 
-# Client code
-streaming_service = StreamingService()
-adapter = VideoAdapter(streaming_service)
+// Modern Payment System (New Interface)
+interface ModernPayment {
+    void makePayment(double amount, String userId);
+}
 
-# Client can start playing a video
-adapter.play("12345")  # Output: Starting video with ID: 12345
+// Two-Way Adapter for both Legacy and Modern Payments
+class PaymentAdapter implements LegacyPayment, ModernPayment {
+    private ModernPayment modernPayment;
+    private LegacyPayment legacyPayment;
 
-# Client can get the status of the video
-print(adapter.get_status())  # Output: Video 12345 is currently playing.
+    public PaymentAdapter(ModernPayment modernPayment) {
+        this.modernPayment = modernPayment;
+    }
 
-# Client can pause the video
-adapter.pause()  # Output: Stopping video.
+    public PaymentAdapter(LegacyPayment legacyPayment) {
+        this.legacyPayment = legacyPayment;
+    }
 
-# Check status after pausing
-print(adapter.get_status())  # Output: Video 12345 is currently playing.
+    // Adapting old system calls to new system
+    @Override
+    public void processPaymentLegacy(double amount, String accountNo) {
+        System.out.println("Converting Legacy to Modern Payment...");
+        modernPayment.makePayment(amount, accountNo);
+    }
+
+    // Adapting new system calls to old system
+    @Override
+    public void makePayment(double amount, String userId) {
+        System.out.println("Converting Modern to Legacy Payment...");
+        legacyPayment.processPaymentLegacy(amount, userId);
+    }
+}
+
+// Modern Payment Implementation
+class NewPaymentSystem implements ModernPayment {
+    @Override
+    public void makePayment(double amount, String userId) {
+        System.out.println("Processing Modern Payment for User: " + userId + " with amount: " + amount);
+    }
+}
+
+// Legacy Payment Implementation
+class OldPaymentSystem implements LegacyPayment {
+    @Override
+    public void processPaymentLegacy(double amount, String accountNo) {
+        System.out.println("Processing Legacy Payment for Account: " + accountNo + " with amount: " + amount);
+    }
+}
+
+// Client Code
+public class TwoWayAdapterExample {
+    public static void main(String[] args) {
+        // Using Legacy System with Modern Payment
+        ModernPayment modernPayment = new NewPaymentSystem();
+        LegacyPayment legacyToModernAdapter = new PaymentAdapter(modernPayment);
+        legacyToModernAdapter.processPaymentLegacy(1000, "ACC123");
+
+        // Using Modern System with Legacy Payment
+        LegacyPayment legacyPayment = new OldPaymentSystem();
+        ModernPayment modernToLegacyAdapter = new PaymentAdapter(legacyPayment);
+        modernToLegacyAdapter.makePayment(2000, "USER456");
+    }
+}
 ```
 
-<p><strong>Classes:</strong></p>
-<ul>
-    <li><strong>VideoPlayer</strong>: The target interface that the client expects to work with.</li>
-    <li><strong>StreamingService</strong>: The adaptee class with methods for starting, stopping, and checking the status of videos, but doesn’t conform to the VideoPlayer interface.</li>
-    <li><strong>VideoAdapter</strong>: The two-way adapter that implements the VideoPlayer interface. It holds an instance of StreamingService and translates calls to its methods into corresponding calls on the service.</li>
-</ul>
+---
 
-<p><strong>Client code:</strong></p>
-<ol>
-    <li>The client can start playing a video by calling <code>adapter.play("12345")</code>, which outputs: <em>Starting video with ID: 12345</em>.</li>
-    <li>The client can check the status of the video by calling <code>adapter.get_status()</code>, which outputs: <em>Video 12345 is currently playing.</em>.</li>
-    <li>The client can pause the video by calling <code>adapter.pause()</code>, which outputs: <em>Stopping video.</em>.</li>
-    <li>After pausing, the client can check the status again, which outputs: <em>Video 12345 is currently playing.</em>.</li>
-</ol>
+**Key Takeaways**
+✅ **Seamless Migration**: Supports both old and new systems simultaneously.  
+✅ **Backward Compatibility**: Allows legacy clients to work with new systems without modifications.  
+✅ **Code Reusability**: Avoids rewriting large codebases by adapting interfaces instead.  
 
-<p><strong>Key Points:</strong></p>
-<ul>
-    <li>This two-way adapter facilitates smooth communication between the VideoPlayer interface and the StreamingService, allowing for both playback and feedback.</li>
-    <li>The two-way adapter pattern is beneficial for scenarios where two systems need to interact with each other bi-directionally, enhancing the integration of components in a system.</li>
-</ul>
+---
+The **Two-Way Adapter Pattern** is essential for scenarios like **software migration, API versioning, and cross-system integrations**, enabling smooth transitions between old and new systems. It ensures continued service without breaking compatibility. 🚀
+
+
 
 <p><strong>Examples for Interface adapter</strong></p>
 <p>In this example, we will create a general <strong>Student</strong> interface that has several methods. However, not all methods will be relevant for both types of students, so we'll use an interface adapter to simplify the implementation.</p>
