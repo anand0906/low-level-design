@@ -1234,7 +1234,7 @@ After Undo: Version 1
 
 <h2>Visitor Design Pattern</h2>
 
-<p>The Visitor Pattern is a behavioral design pattern that allows you to separate an algorithm from the object structure on which it operates. This pattern enables you to add new operations to existing object structures without modifying those structures. It promotes the open/closed principle, which states that classes should be open for extension but closed for modification.</p>
+<p>The <strong>Visitor Pattern</strong> is a behavioral design pattern that allows you to separate an algorithm from the object structure on which it operates. This pattern enables you to add new operations to existing object structures without modifying those structures. It promotes the <strong>Open/Closed Principle</strong>, which states that classes should be <strong>open for extension</strong> but <strong>closed for modification</strong>.</p>
 
 <p><strong>Key Characteristics of the Visitor Pattern</strong></p>
 <ul>
@@ -1244,7 +1244,6 @@ After Undo: Version 1
 </ul>
 
 <p><strong>Why Use the Visitor Pattern?</strong></p>
-<p>Use the Visitor Pattern when:</p>
 <ul>
     <li>You need to perform operations on objects of different classes without modifying those classes.</li>
     <li>You want to define a new operation without changing the classes of the elements on which it operates.</li>
@@ -1252,94 +1251,167 @@ After Undo: Version 1
 </ul>
 
 <p><strong>Real-World Analogy</strong></p>
-<p>Consider a shopping mall. Each store (element) offers different products (operations). A customer (visitor) can visit different stores to check out their products without altering the stores themselves. The stores can define how they want to present their products to customers without changing their internal structure.</p>
+<p>Consider a <strong>hotel management system</strong>. The hotel has different types of rooms (<strong>Single Room, Double Room, Deluxe Room</strong>). Each room type requires different operations like <strong>pricing calculations</strong>, <strong>maintenance checks</strong>, and <strong>cleaning services</strong>. Instead of modifying each room class for every new operation, we use the <strong>Visitor Pattern</strong> to define operations separately.</p>
 
 <p><strong>Components Involved</strong></p>
 <ol>
-    <li><strong>Visitor Interface</strong>: Declares a visit method for each type of element that can be visited.</li>
-    <li><strong>Concrete Visitor</strong>: Implements the visitor interface to define specific operations for each element type.</li>
+    <li><strong>Visitor Interface</strong>: Declares a visit method for each type of room that can be visited.</li>
+    <li><strong>Concrete Visitor</strong>: Implements the visitor interface to define specific operations for each room type.</li>
     <li><strong>Element Interface</strong>: Defines an accept method that takes a visitor as an argument.</li>
     <li><strong>Concrete Elements</strong>: Classes that implement the element interface and accept visitors.</li>
 </ol>
 
 <p><strong>Steps to Implement the Visitor Pattern</strong></p>
 <ol>
-    <li>Create a <strong>Visitor Interface</strong> that declares methods for visiting each type of element.</li>
-    <li>Implement a <strong>Concrete Visitor</strong> that defines specific operations for each element type.</li>
+    <li>Create a <strong>Visitor Interface</strong> that declares methods for visiting each type of room.</li>
+    <li>Implement a <strong>Concrete Visitor</strong> that defines specific operations for each room type.</li>
     <li>Create an <strong>Element Interface</strong> with an accept method that accepts a visitor.</li>
-    <li>Implement <strong>Concrete Elements</strong> that accept visitors and call the corresponding visit methods.</li>
+    <li>Implement <strong>Concrete Elements</strong> (room types) that accept visitors and call the corresponding visit methods.</li>
 </ol>
 
-<p><strong>Python Example</strong></p>
+<p><strong>Java Example</strong></p>
 
-<p>Here’s an example in Python demonstrating the Visitor Pattern with a shopping cart system:</p>
+```java
+// Step 1: Define the Element Interface (Rooms)
+interface Room {
+    void accept(RoomVisitor visitor);  // Double Dispatch
+}
 
-```python
-class ItemVisitor:
-    def visit_book(self, book):
-        pass
+// Step 2: Implement Concrete Room Classes
+class SingleRoom implements Room {
+    @Override
+    public void accept(RoomVisitor visitor) {
+        visitor.visit(this);  // Calls the correct visitor method
+    }
+}
 
-    def visit_electronics(self, electronics):
-        pass
+class DoubleRoom implements Room {
+    @Override
+    public void accept(RoomVisitor visitor) {
+        visitor.visit(this);
+    }
+}
 
-class Book:
-    def __init__(self, title):
-        self.title = title
+class DeluxeRoom implements Room {
+    @Override
+    public void accept(RoomVisitor visitor) {
+        visitor.visit(this);
+    }
+}
 
-    def accept(self, visitor):
-        visitor.visit_book(self)
+// Step 3: Define the Visitor Interface
+interface RoomVisitor {
+    void visit(SingleRoom room);
+    void visit(DoubleRoom room);
+    void visit(DeluxeRoom room);
+}
 
-class Electronics:
-    def __init__(self, name):
-        self.name = name
+// Step 4: Implement Concrete Visitor Classes
+// Visitor for pricing calculation
+class PriceCalculator implements RoomVisitor {
+    @Override
+    public void visit(SingleRoom room) {
+        System.out.println("Single Room Price: $100");
+    }
 
-    def accept(self, visitor):
-        visitor.visit_electronics(self)
+    @Override
+    public void visit(DoubleRoom room) {
+        System.out.println("Double Room Price: $180");
+    }
 
-class ShoppingCartVisitor(ItemVisitor):
-    def visit_book(self, book):
-        print(f"Visiting book: {book.title}")
+    @Override
+    public void visit(DeluxeRoom room) {
+        System.out.println("Deluxe Room Price: $250");
+    }
+}
 
-    def visit_electronics(self, electronics):
-        print(f"Visiting electronics: {electronics.name}")
+// Visitor for maintenance tasks
+class MaintenanceChecker implements RoomVisitor {
+    @Override
+    public void visit(SingleRoom room) {
+        System.out.println("Maintenance check for Single Room.");
+    }
 
-# Client Code
-def main():
-    book1 = Book("The Great Gatsby")
-    book2 = Book("1984")
-    electronics1 = Electronics("Laptop")
-    electronics2 = Electronics("Smartphone")
+    @Override
+    public void visit(DoubleRoom room) {
+        System.out.println("Maintenance check for Double Room.");
+    }
 
-    visitor = ShoppingCartVisitor()
+    @Override
+    public void visit(DeluxeRoom room) {
+        System.out.println("Maintenance check for Deluxe Room.");
+    }
+}
 
-    # Visiting items in the shopping cart
-    items = [book1, book2, electronics1, electronics2]
-    for item in items:
-        item.accept(visitor)
+// Step 5: Client Code
+public class VisitorPatternDemo {
+    public static void main(String[] args) {
+        Room[] rooms = {new SingleRoom(), new DoubleRoom(), new DeluxeRoom()};
 
-if __name__ == "__main__":
-    main()
+        RoomVisitor priceCalculator = new PriceCalculator();
+        RoomVisitor maintenanceChecker = new MaintenanceChecker();
+
+        System.out.println("=== Calculating Room Prices ===");
+        for (Room room : rooms) {
+            room.accept(priceCalculator);  // Calls the correct visit() method
+        }
+
+        System.out.println("\n=== Performing Maintenance Checks ===");
+        for (Room room : rooms) {
+            room.accept(maintenanceChecker);
+        }
+    }
+}
+
 ```
 
-<p><strong>Explanation:</strong></p>
+<p><strong>Step 1: Define the Element Interface (Rooms)</strong></p>
+<p><strong>interface Room {</strong> void accept(RoomVisitor visitor); <strong>}</strong></p>
+
+<p><strong>Step 2: Implement Concrete Room Classes</strong></p>
 <ul>
-    <li>The <strong>ItemVisitor</strong> interface declares visit methods for different types of items (books and electronics).</li>
-    <li>The <strong>Book</strong> and <strong>Electronics</strong> classes implement the <strong>accept()</strong> method, which calls the appropriate visit method of the visitor.</li>
-    <li>The <strong>ShoppingCartVisitor</strong> class implements the <strong>ItemVisitor</strong> interface and defines specific operations for visiting books and electronics.</li>
-    <li>The <strong>Client Code</strong> demonstrates how to create items and a visitor to visit those items.</li>
+    <li><strong>SingleRoom</strong>: Implements accept method and calls visitor's visit method.</li>
+    <li><strong>DoubleRoom</strong>: Implements accept method and calls visitor's visit method.</li>
+    <li><strong>DeluxeRoom</strong>: Implements accept method and calls visitor's visit method.</li>
 </ul>
 
-<p><strong>Output Example:</strong></p>
+<p><strong>Step 3: Define the Visitor Interface</strong></p>
+<p><strong>interface RoomVisitor {</strong></p>
+<ul>
+    <li>void visit(SingleRoom room);</li>
+    <li>void visit(DoubleRoom room);</li>
+    <li>void visit(DeluxeRoom room);</li>
+</ul>
+<p><strong>}</strong></p>
 
-```python
-Visiting book: The Great Gatsby
-Visiting book: 1984
-Visiting electronics: Laptop
-Visiting electronics: Smartphone
-```
+<p><strong>Step 4: Implement Concrete Visitor Classes</strong></p>
+<ul>
+    <li><strong>PriceCalculator</strong>: Calculates the price for each room.</li>
+    <li><strong>MaintenanceChecker</strong>: Performs maintenance checks on rooms.</li>
+</ul>
 
-<p>This example illustrates how the Visitor Pattern allows operations to be added to an object structure without modifying the structure itself, promoting clean separation of concerns and enhancing maintainability. By using a visitor, we can easily extend functionality to new types of elements without altering their existing code.</p>
+<p><strong>Step 5: Client Code</strong></p>
+<ul>
+    <li>Create an array of room objects.</li>
+    <li>Create visitor objects for pricing and maintenance.</li>
+    <li>Use visitor objects to process each room.</li>
+</ul>
 
-<br>
-<br>
+<p><strong>Output Example</strong></p>
+<ul>
+    <li>Single Room Price: $100</li>
+    <li>Double Room Price: $180</li>
+    <li>Deluxe Room Price: $250</li>
+    <li>Maintenance check for Single Room.</li>
+    <li>Maintenance check for Double Room.</li>
+    <li>Maintenance check for Deluxe Room.</li>
+</ul>
 
+<p><strong>Key Takeaways</strong></p>
+<ul>
+    <li><strong>Extensible Design</strong> – You can add more operations (e.g., cleaning, discount calculation) without modifying room classes.</li>
+    <li><strong>Encapsulation of Behaviors</strong> – Each visitor encapsulates a separate concern (<strong>pricing, maintenance, etc.</strong>).</li>
+    <li><strong>Double Dispatch</strong> – Ensures that the correct visit method is called based on both the <strong>room type</strong> and the <strong>visitor type</strong>.</li>
+</ul>
+
+<p>This <strong>Visitor Pattern</strong> implementation enables <strong>scalability</strong>, <strong>maintainability</strong>, and <strong>flexibility</strong> in hotel management systems.</p>
